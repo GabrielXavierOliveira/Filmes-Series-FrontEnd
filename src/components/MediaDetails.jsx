@@ -43,27 +43,24 @@ const MediaDetails = () => {
     fetchMedia();
   }, [fetchMedia]);
 
-  const handleVote = async (reacao) => {
-    const usuarioId = localStorage.getItem('userId');
-    if (!usuarioId) {
+const handleVote = async (reacao) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
       alert('Você precisa estar logado para votar!');
       navigate('/login');
       return;
     }
-    
+
     try {
       if (userVote === reacao) {
         await api.delete('/votos', {
           data: {
-            usuarioId: parseInt(usuarioId),
             mediaId: parseInt(id),
           }
         });
         setUserVote(null);
       } else {
-        
         const voteData = {
-          usuarioId: parseInt(usuarioId),
           mediaId: parseInt(id),
           reacao: reacao,
         };

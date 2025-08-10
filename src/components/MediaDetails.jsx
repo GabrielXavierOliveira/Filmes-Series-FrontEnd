@@ -11,21 +11,21 @@ const MediaDetails = () => {
   const [userVote, setUserVote] = useState(null);
 
   const fetchMedia = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const token = localStorage.getItem('token'); //Verifica se usuário possui token de login
+    if (!token) { //Se o usuário não estiver logado, direciona para pagina de login
       navigate('/login');
       return;
     }
     try {
-      const mediaResponse = await api.get(`/medias/${id}`);
+      const mediaResponse = await api.get(`/medias/${id}`); //Busca informações do filme ou série selecionado
       setMedia(mediaResponse.data);
       
-      const voteResponse = await api.get(`/votos/reacao/${id}`);
+      const voteResponse = await api.get(`/votos/reacao/${id}`); //Verifica se o usuário já votou no filme ou série selecionado
       setUserVote(voteResponse.data.reacao);
 
       setLoading(false);
     } catch (err) {
-      if (err.response && err.response.status === 401) {
+      if (err.response && err.response.status === 401) { //Se a API retorna que o token é não autorizado, remove o token e redireciona para login
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login');
@@ -44,16 +44,16 @@ const MediaDetails = () => {
   }, [fetchMedia]);
 
 const handleVote = async (reacao) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const token = localStorage.getItem('token'); //Verifica se usuário possui token de login
+    if (!token) { //Se o usuário não estiver logado, direciona para pagina de login
       alert('Você precisa estar logado para votar!');
       navigate('/login');
       return;
     }
 
     try {
-      if (userVote === reacao) {
-        await api.delete('/votos', {
+      if (userVote === reacao) { //Verifica se o usuário clicou na mesma opção de voto anterior
+        await api.delete('/votos', { //Remove o voto se em mesma opção selecionada anteriormente
           data: {
             mediaId: parseInt(id),
           }
@@ -64,7 +64,7 @@ const handleVote = async (reacao) => {
           mediaId: parseInt(id),
           reacao: reacao,
         };
-        await api.post('/votos', voteData);
+        await api.post('/votos', voteData); //Se nao votou anteriormente, registra novo voto
         setUserVote(reacao);
       }
 
@@ -83,10 +83,10 @@ const handleVote = async (reacao) => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = () => { //Realiza logout do usuário
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    navigate('/login');
+    navigate('/login'); //Redireciona para a página de login
   };
 
   if (loading) return <div className="container mt-5"><p>Carregando detalhes...</p></div>;

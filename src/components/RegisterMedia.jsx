@@ -25,12 +25,12 @@ const RegisterMedia = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { //Realiza envio de cadastro para filme ou série
     e.preventDefault();
     setError('');
     setMessage('');
 
-    if (genero.length === 0) {
+    if (genero.length === 0) { //Verifica se tem genero selecionado para o filme ou série
       setError('Selecione pelo menos um gênero.');
       return;
     }
@@ -41,12 +41,13 @@ const RegisterMedia = () => {
 
       setMessage(`Mídia "${response.data.titulo}" registrada com sucesso!`);
 
+      //Limpa o formulário
       setTitulo('');
       setDescricao('');
       setImagemUrl('');
       setGenero([]);
 
-      setTimeout(() => {
+      setTimeout(() => { //Retorna a homepage após 2 segungos
         navigate('/');
       }, 2000);
 

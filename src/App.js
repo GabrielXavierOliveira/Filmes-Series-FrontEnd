@@ -29,14 +29,14 @@ const Home = () => {
 
 useEffect(() => {
     const fetchAllData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
+      const token = localStorage.getItem('token'); //Verifica se usuário possui token de login
+      if (!token) { //Se o usuário não estiver logado, direciona para pagina de login
         navigate('/login');
         return;
       }
       try {
         
-        const [mediasResponse, votosResponse] = await Promise.all([
+        const [mediasResponse, votosResponse] = await Promise.all([ //Realiza busca de filmes e séries e o total de votos para a home page
           api.get('/Medias'),
           api.get('/Votos')
         ]);
@@ -49,7 +49,7 @@ useEffect(() => {
 
         setLoading(false);
       } catch (err) {
-        if (err.response && err.response.status === 401) {
+        if (err.response && err.response.status === 401) { //Se a API retorna que o token é não autorizado, remove o token e redireciona para login
           localStorage.removeItem('token');
           localStorage.removeItem('userId');
           navigate('/login');
@@ -62,7 +62,7 @@ useEffect(() => {
     fetchAllData();
   }, [navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = () => { //Realiza Logout do usuário
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     navigate('/login');

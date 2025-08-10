@@ -8,17 +8,18 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e) => {//Realiza operação de Login do usuário
     e.preventDefault();
     setError('');
 
     try {
       const response = await api.post('/Auth/Login', { login, senha });
 
+      //Armazena token e informações do usuario ao storage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data.id);
       
-      navigate('/');
+      navigate('/'); //Redireciona a home page
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         setError(err.response.data.error);

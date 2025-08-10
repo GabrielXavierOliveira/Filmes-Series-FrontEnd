@@ -15,11 +15,11 @@ const Register = () => {
     setMessage('');
 
     try {
-      const response = await api.post('/Auth/Registro', { login, senha });
+      const response = await api.post('/Auth/Registro', { login, senha }); //Realiza operação de cadastro de usuário
 
       setMessage(response.data.message);
       
-      setTimeout(() => {
+      setTimeout(() => { //Redireciona a pagina de login após 2 segundos se obtiver sucesso no registro
         navigate('/login');
       }, 2000);
 
